@@ -1,0 +1,33 @@
+<MenuScreen>:
+    btn_start: btn_start
+    btn_pause: btn_pause
+    lbl_timer: lbl_timer
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            id: lbl_timer
+            text: '00:00:00'
+            font_name: 'DJB Get Digital'
+
+        Button:
+            id: btn_start
+            text: 'Start Timer'
+            on_release: root.start_timer()
+
+        Button:
+            id: btn_pause
+            text: 'Pause Timer'
+
+        Button:
+            id: btn_stats
+            text: 'Statistics'
+
+        Button:
+            text: 'Quit'
+            on_release: exit()
+
+<StatsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
