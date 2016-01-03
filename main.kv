@@ -2,32 +2,141 @@
     btn_start: btn_start
     btn_pause: btn_pause
     lbl_timer: lbl_timer
+    txt_comments: txt_comments
+
+    canvas:
+        Color:
+            rgba: 1, 0, 0
+        Rectangle:
+            source: 'images/background.jpg'
+            size: self.size
 
     BoxLayout:
-        orientation: 'vertical'
+        orientation: 'horizontal'
 
-        Label:
-            id: lbl_timer
-            text: '00:00:00'
-            font_name: 'DJB Get Digital'
+        FloatLayout:
+            size_hint_y: .5
 
-        Button:
-            id: btn_start
-            text: 'Start Timer'
-            on_release: root.start_timer()
+            Label:
+                id: lbl_timer
+                text: '00:00:00'
+                font_size: 80
+                font_name: 'DJB Get Digital'
+                size_hint_y: .3
+                pos_hint: {'x': 0., 'y': 1.6}
 
-        Button:
-            id: btn_pause
-            text: 'Pause Timer'
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 50
+                size_hint: .5, .2
+                pos_hint: {'x': .25, 'y': .1}
 
-        Button:
-            id: btn_stats
-            text: 'Statistics'
+                Button:
+                    text: 'Quit'
+                    pos_hint: {'x': .0, 'y': .0}
+                    on_release: exit()
 
-        Button:
-            text: 'Quit'
-            on_release: exit()
+                    border: (0, 0, 0, 0)
+                    background_normal: 'images/button.png'
+                    background_down: 'images/button_down.png'
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 50
+            size_hint_y: .5
+            pos_hint: {'x': 1, 'y': .2}
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: .6, 2
+
+                Button:
+                    id: btn_start
+                    text: 'Start Timer'
+                    on_release: root.start_timer()
+
+                    border: (0, 0, 0, 0)
+                    background_normal: 'images/button.png'
+					background_down: 'images/button_down.png'
+
+                TextInput:
+                    id: txt_comments
+                    size: 0, 0
+                    opacity: 1
+            Button:
+                id: btn_pause
+                text: 'Pause Timer'
+                size_hint_x: .6
+                on_release: root.pause_timer()
+
+
+                border: (0, 0, 0, 0)
+                background_normal: 'images/button.png'
+                background_down: 'images/button_down.png'
+
+            Button:
+                id: btn_stats
+                text: 'Statistics'
+                size_hint_x: .6
+                on_release: root.manager.current = 'stats'
+
+                border: (0, 0, 0, 0)
+                background_normal: 'images/button.png'
+                background_down: 'images/button_down.png'
 
 <StatsScreen>:
+    rel_records: rel_records
+    grd_records: grd_records
+    canvas:
+        Color:
+            rgba: 1, 0, 0
+        Rectangle:
+            source: 'images/background.jpg'
+            size: self.size
+
     BoxLayout:
         orientation: 'vertical'
+
+        BoxLayout:
+            padding: 30
+            canvas:
+                Color:
+                    rgb: 1, 1, 1, 0
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: 'images/scroll_back.png'
+
+            ScrollView:
+                do_scroll_x: False
+                scroll_y: 1
+
+
+                RelativeLayout:
+                    id: rel_records
+                    size_hint: (1, None)
+
+                    GridLayout:
+                        id: grd_records
+                        cols: 4
+
+                        row_force_default: True
+                        row_default_height: self.width /  20
+                        col_force_default: True
+                        col_default_width: self.width / 4
+                        size_hint: (1, None)
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 50
+            size_hint: .5, .1
+            pos_hint: {'x': .25, 'y': .1}
+
+            Button:
+                text: 'Back'
+                pos_hint: {'x': .0, 'y': .0}
+                on_release: root.manager.current = 'menu'
+
+                border: (0, 0, 0, 0)
+                background_normal: 'images/button.png'
+                background_down: 'images/button_down.png'

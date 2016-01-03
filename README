@@ -1,4 +1,13 @@
 Basic little Kivy app to keep track of hours worked.
 
-Font from
+To get Kivy working, check out http://kivy.org/docs/installation/installation.html
+Create a ve as per kivy installation page http://kivy.org/docs/installation/installation-linux.html
+
+To run, enter the ve, cd to the dir with main in and run
+python main.py
+
+LCD Font found here
 http://www.dafont.com/djb-get-digital.font
+
+Background found here:
+http://www.wallpaperel.com/aurora-earth-210695.html
