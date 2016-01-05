@@ -141,6 +141,9 @@ class DBAccess:
         self.conn = sqlite3.connect('times.db')
         self.c = self.conn.cursor()
 
+        if not self.c.execute("SELECT * FROM sqlite_master WHERE type='table' AND name='times'").fetchone():
+            self.c.execute('CREATE TABLE times (time_start TEXT, total_time TEXT, comments TEXT, invoiced INT)')
+
     def save_record(self, **kwargs):
         self.c.execute('INSERT INTO times VALUES (?, ?, ?, ?)',
                        (datetime.datetime.strftime(kwargs['timer_start'], "%Y-%m-%d %H:%M:%S"),
