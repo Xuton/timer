@@ -17,6 +17,12 @@
         FloatLayout:
             size_hint_y: .5
 
+            TextInput:
+                id: txt_comments
+                size: 0, 0
+                size_hint: .4, .2
+                pos_hint: {'x': 1.01, 'y': 1.59}
+
             Label:
                 id: lbl_timer
                 text: '00:00:00'
@@ -42,27 +48,21 @@
 
         BoxLayout:
             orientation: 'vertical'
-            spacing: 50
-            size_hint_y: .5
-            pos_hint: {'x': 1, 'y': .2}
+            spacing: 120
 
-            BoxLayout:
-                orientation: 'vertical'
-                size_hint: .6, 2
+            size_hint: .7, .8
+            pos_hint: {'x': .1, 'y': .1}
 
-                Button:
-                    id: btn_start
-                    text: 'Start Timer'
-                    on_release: root.start_timer()
+            Button:
+                id: btn_start
+                text: 'Start Timer'
+                size_hint_x: .6
+                on_release: root.start_timer()
 
-                    border: (0, 0, 0, 0)
-                    background_normal: 'images/button.png'
-					background_down: 'images/button_down.png'
+                border: (0, 0, 0, 0)
+                background_normal: 'images/button.png'
+                background_down: 'images/button_down.png'
 
-                TextInput:
-                    id: txt_comments
-                    size: 0, 0
-                    opacity: 1
             Button:
                 id: btn_pause
                 text: 'Pause Timer'

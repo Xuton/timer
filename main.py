@@ -2,6 +2,7 @@ import datetime
 import sqlite3
 
 from kivy.app import App
+from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -28,6 +29,10 @@ class MenuScreen(Screen):
 
     def start_timer(self):
 
+        def anim_func(*args):
+            # TODO gotta be a better way than this
+            anim2.start(self.txt_comments)
+
         if self.btn_start.text == 'Resume Timer':
             self.resume_timer()
 
@@ -37,7 +42,14 @@ class MenuScreen(Screen):
             self.timer_start = datetime.datetime.now()
             self.timer_current = datetime.datetime(year=2015, month=1, day=1)
 
+            # Start the timer
             Clock.schedule_interval(self.set_timer, 1)
+
+            # Do the comments box animation
+            anim = Animation(pos_hint={'x': 1.01, 'y': 1.32}, duration=.1)
+            anim2 = Animation(size_hint=(.8, .38), pos_hint={'x': .8, 'y': 1.15}, duration=.5)
+            Clock.schedule_once(anim_func, .2)
+
         else:
             # Stop the timer, save the item and reset screen
             Clock.unschedule(self.set_timer)
@@ -45,6 +57,13 @@ class MenuScreen(Screen):
             self.btn_start.text = 'Start Timer'
             self.lbl_timer.text = '00:00:00'
             self.txt_comments.text = ''
+
+            # Do the comments box animation
+            anim = Animation(size_hint=(.4, .2), pos_hint={'x': 1.01, 'y': 1.32}, duration=.5)
+            anim2 = Animation(pos_hint={'x': 1.01, 'y': 1.59}, duration=.1)
+            Clock.schedule_once(anim_func, .6)
+
+        anim.start(self.txt_comments)
 
     def resume_timer(self):
         Clock.schedule_interval(self.set_timer, 1)
