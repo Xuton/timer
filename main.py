@@ -100,8 +100,8 @@ class StatsScreen(Screen):
         self.grd_records.add_widget(self.get_label('Invoiced', font_size=24))
 
         for record in db.get_records():
-            self.grd_records.add_widget(self.get_label(str(datetime.datetime.fromordinal(record[0]))))
-            self.grd_records.add_widget(self.get_label(str(datetime.datetime.fromordinal(record[1]))))
+            self.grd_records.add_widget(self.get_label(str(record[0])))
+            self.grd_records.add_widget(self.get_label(str(record[1])))
             self.grd_records.add_widget(self.get_label(str(record[2])))
             self.grd_records.add_widget(self.get_label(str(bool(record[3]))))
 
@@ -125,8 +125,8 @@ class DBAccess:
 
     def save_record(self, **kwargs):
         self.c.execute('INSERT INTO times VALUES (?, ?, ?, ?)',
-                       (datetime.datetime.toordinal(kwargs['timer_start']),
-                        datetime.datetime.toordinal(kwargs['timer_current']),
+                       (datetime.datetime.strftime(kwargs['timer_start'], "%Y-%m-%d %H:%M:%S"),
+                        datetime.datetime.strftime(kwargs['timer_current'], "%H:%M:%S"),
                         kwargs['comments'],
                         kwargs['invoiced'])
                        )
