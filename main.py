@@ -6,8 +6,13 @@ from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
+
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 
 
 class MenuScreen(Screen):
@@ -103,6 +108,10 @@ class StatsScreen(Screen):
         # 1 == Invoiced True
         self.filter = '0'
 
+        self.checks = []  # Keeping a record of all the checkboxes so I don't need to loop over to find them
+        self.popup = None
+        self.mode = None
+
     def set_filter(self, btn):
         self.filter = btn
         self.populate_table()
@@ -112,20 +121,74 @@ class StatsScreen(Screen):
 
     def populate_table(self):
         self.grd_records.clear_widgets()
+
         self.grd_records.add_widget(self.get_label('Start time', font_size=24))
         self.grd_records.add_widget(self.get_label('Total Time', font_size=24))
         self.grd_records.add_widget(self.get_label('Comments', font_size=24))
         self.grd_records.add_widget(self.get_label('Invoiced', font_size=24))
+
+        box = BoxLayout(spacing=5)
+        box.add_widget(self.get_button(text='Delete', callback=self.btn_clicked))
+        box.add_widget(self.get_button(text='Invoice', callback=self.btn_clicked))
+        self.grd_records.add_widget(box)
 
         for record in db.get_records(self.filter):
             self.grd_records.add_widget(self.get_label(str(record[0])))
             self.grd_records.add_widget(self.get_label(str(record[1])))
             self.grd_records.add_widget(self.get_label(str(record[2])))
             self.grd_records.add_widget(self.get_label(str(bool(record[3]))))
+            self.grd_records.add_widget(self.get_checkbox())
 
         self.grd_records.bind(minimum_height=self.grd_records.setter('height'))
         self.grd_records.height = (len(self.grd_records.children) / 4) * self.grd_records.row_default_height
         self.rel_records.height = self.grd_records.height
+
+    def close_popup(self):
+        if self.mode == 'delete':
+            pass
+
+        elif self.mode == 'invoice':
+            pass
+
+        self.popup.dismiss()
+        self.populate_table()
+
+        self.popup = None
+        self.mode = None
+
+    def btn_clicked(self, instance):
+        checks = [c for c in self.checks if c.active]
+        if checks:
+            self.mode = instance.text.lower()
+            title = 'Are you sure you want to {} the selected records?'.format(instance.text.lower())
+            content = BoxLayout(spacing=5)
+            content.add_widget(self.get_button(text='Yes', callback=self.close_popup))
+            content.add_widget(self.xet_button(text='No', callback=self.close_popup))
+
+            self.popup = Popup(title=title, content=content, size_hint=(.4, .2))
+            self.popup.open()
+
+    @staticmethod
+    def get_button(**kwargs):
+        btn = Button(
+                text=kwargs['text'],
+                border=(0, 0, 0, 0),
+                background_normal='images/small_button.png',
+                background_down='images/small_button_down.png',
+                )
+        btn.bind(on_press=kwargs['callback'])
+        return btn
+
+    def get_checkbox(self):
+        chk = CheckBox(
+                border=(0, 0, 0, 0),
+                background_normal='images/del_button.png',
+                background_down='images/del_button_down.png',
+                # size_hint_x=.2,
+                # width=1,
+                )
+        self.checks.append(chk)
+        return chk
 
     @staticmethod
     def get_label(text, font_size=14):
