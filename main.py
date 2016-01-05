@@ -94,6 +94,7 @@ class StatsScreen(Screen):
         self.grd_records = self.ids.grd_records
 
     def on_enter(self):
+        self.grd_records.clear_widgets()
         self.grd_records.add_widget(self.get_label('Start time', font_size=24))
         self.grd_records.add_widget(self.get_label('Total Time', font_size=24))
         self.grd_records.add_widget(self.get_label('Comments', font_size=24))
