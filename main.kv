@@ -85,6 +85,10 @@
                 background_down: 'images/button_down.png'
 
 <StatsScreen>:
+    btn_all: btn_all
+    btn_invoiced: btn_invoiced
+    btn_not_invoiced: btn_not_invoiced
+
     rel_records: rel_records
     grd_records: grd_records
     canvas:
@@ -96,9 +100,41 @@
 
     BoxLayout:
         orientation: 'vertical'
+        padding: 30
+        BoxLayout:
+            size_hint_y: .1
+            ToggleButton:
+                id: btn_all
+                text: 'All'
+                group: filter
+
+                border: (0, 0, 0, 0)
+                background_normal: 'images/button.png'
+                background_down: 'images/button_down.png'
+                on_release: root.set_filter('-1')
+
+            ToggleButton:
+                id: btn_invoiced
+                text: 'Invoiced'
+                group: filter
+
+                border: (0, 0, 0, 0)
+                background_normal: 'images/button.png'
+                background_down: 'images/button_down.png'
+                on_release: root.set_filter('1')
+
+            ToggleButton:
+                id: btn_not_invoiced
+                text: 'To be Invoiced'
+                group: filter
+                state: 'down'
+
+                border: (0, 0, 0, 0)
+                background_normal: 'images/button.png'
+                background_down: 'images/button_down.png'
+                on_release: root.set_filter('0')
 
         BoxLayout:
-            padding: 30
             canvas:
                 Color:
                     rgb: 1, 1, 1, 0

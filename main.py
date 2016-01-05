@@ -91,16 +91,33 @@ class MenuScreen(Screen):
 class StatsScreen(Screen):
     def __init__(self, **kwargs):
         super(StatsScreen, self).__init__(**kwargs)
+
+        self.btn_all = self.ids.btn_all
+        self.btn_invoiced = self.ids.btn_invoiced
+        self.btn_not_invoiced = self.ids.btn_not_invoiced
         self.grd_records = self.ids.grd_records
 
+        # Filter is based on boolean field in times table
+        # -1 == All
+        # 0 == Invoiced False
+        # 1 == Invoiced True
+        self.filter = '0'
+
+    def set_filter(self, btn):
+        self.filter = btn
+        self.populate_table()
+
     def on_enter(self):
+        self.populate_table()
+
+    def populate_table(self):
         self.grd_records.clear_widgets()
         self.grd_records.add_widget(self.get_label('Start time', font_size=24))
         self.grd_records.add_widget(self.get_label('Total Time', font_size=24))
         self.grd_records.add_widget(self.get_label('Comments', font_size=24))
         self.grd_records.add_widget(self.get_label('Invoiced', font_size=24))
 
-        for record in db.get_records():
+        for record in db.get_records(self.filter):
             self.grd_records.add_widget(self.get_label(str(record[0])))
             self.grd_records.add_widget(self.get_label(str(record[1])))
             self.grd_records.add_widget(self.get_label(str(record[2])))
@@ -133,8 +150,12 @@ class DBAccess:
                        )
         self.conn.commit()
 
-    def get_records(self):
-        return self.c.execute('SELECT * FROM times')
+    def get_records(self, filter):
+        if int(filter) == -1:
+            return self.c.execute('SELECT * FROM times')
+        else:
+            return self.c.execute('SELECT * FROM times WHERE invoiced=?', filter)
+
 
 Builder.load_file('main.kv')
 sm = ScreenManager()
